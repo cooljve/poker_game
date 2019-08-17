@@ -1,5 +1,3 @@
-import sun.rmi.server.InactiveGroupException;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,11 +23,21 @@ public class PokerGame {
           return -1;
         }
       }
-    }else {
+    } else {
       if (map1.size() > map2.size()) {
         return -1;
       } else if (map1.size() < map2.size()) {
         return 1;
+      } else {
+        List<Integer> keyList1 = getKey(map1, 2);
+        List<Integer> keyList2 = getKey(map2, 2);
+        for (int i = 0; i < keyList1.size(); i++) {
+          if (keyList1.get(i) > keyList2.get(i)) {
+            return 1;
+          } else if (keyList1.get(i) < keyList2.get(i)) {
+            return -1;
+          }
+        }
       }
     }
 
@@ -44,5 +52,14 @@ public class PokerGame {
         .forEach(pokerList::add);
     pokerList = pokerList.stream().sorted(Comparator.comparing(Poker::getSize)).collect(Collectors.toList());
     return pokerList;
+  }
+
+  public static List<Integer> getKey(Map map, Object value) {
+    List<Integer> keyList = new ArrayList<>();
+    map.keySet().stream()
+        .filter(x -> value.equals(map.get(x)))
+        .mapToInt(x -> (Integer) x)
+        .forEach(keyList::add);
+    return keyList;
   }
 }
