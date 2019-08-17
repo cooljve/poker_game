@@ -35,4 +35,15 @@ public class PokerGameTest {
 
     assertEquals(-1, res);
   }
+
+  @Test
+  public void should_return_minus_when_given_a_1D_3C_5D_QH_KS_b_1D_2C_2D_JH_KS() {
+    String a = "1D 3C 5D QH KS";
+    String b = "1D 2C 2D JH KS";
+    PokerGame pg = new PokerGame();
+
+    int res = pg.judge(a, b);
+
+    assertEquals(-1, res);
+  }
 }
