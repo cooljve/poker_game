@@ -6,7 +6,14 @@ public class PokerGame {
   public int judge(String card1, String card2) {
     List<Poker> pokerList1 = convertCards(card1);
     List<Poker> pokerList2 = convertCards(card2);
-    if (isStraight(pokerList1,pokerList2)) {
+    if (hasFlush(pokerList1, pokerList2)) {
+      if (isFlush(pokerList1) && !isFlush(pokerList2)) {
+        return 1;
+      } else if (isFlush(pokerList2) && !isFlush(pokerList1)) {
+        return -1;
+      }
+    }
+    if (hasStraight(pokerList1,pokerList2)) {
       if (isStraight(pokerList1) && !isStraight(pokerList2)) {
         return 1;
       } else if (isStraight(pokerList2) && !isStraight(pokerList1)) {
@@ -21,7 +28,7 @@ public class PokerGame {
     for (Poker poker : pokerList2) {
       map2.put(poker.getSize(), map2.getOrDefault(poker.getSize(), 0) + 1);
     }
-    if (isaHighCard(pokerList1, pokerList2, map1, map2)) {
+    if (isHighCard(pokerList1, pokerList2, map1, map2)) {
       Integer x = judgeHighCard(pokerList1, pokerList2);
       if (x != null) return x;
     } else {
@@ -54,7 +61,19 @@ public class PokerGame {
     return 0;
   }
 
-  private boolean isStraight(List<Poker> pokerList1, List<Poker> pokerList2) {
+  private boolean hasFlush(List<Poker> pokerList1, List<Poker> pokerList2) {
+    return isFlush(pokerList1) || isFlush(pokerList2);
+  }
+
+  private boolean isFlush(List<Poker> pokerList) {
+    Map<String, Integer> map = new HashMap<>();
+    for (Poker poker : pokerList) {
+      map.put(poker.getColor(), map.getOrDefault(poker.getColor(), 0) + 1);
+    }
+    return map.size() == 1;
+  }
+
+  private boolean hasStraight(List<Poker> pokerList1, List<Poker> pokerList2) {
     return isStraight(pokerList1) || isStraight(pokerList2);
   }
 
@@ -78,7 +97,7 @@ public class PokerGame {
     return null;
   }
 
-  private boolean isaHighCard(List<Poker> pokerList1, List<Poker> pokerList2, Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
+  private boolean isHighCard(List<Poker> pokerList1, List<Poker> pokerList2, Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
     return map1.size() == pokerList1.size() && map2.size() == pokerList2.size();
   }
 
