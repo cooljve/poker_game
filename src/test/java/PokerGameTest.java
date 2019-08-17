@@ -222,4 +222,15 @@ public class PokerGameTest {
 
     assertEquals(-1, res);
   }
+
+  @Test
+  public void should_return_positive_when_given_a_1D_3C_3D_3H_1S_b_1D_2C_2D_2H_1S() {
+    String a = "1D 3C 3D 3H 1S";
+    String b = "1D 2C 2D 2H 1S";
+    PokerGame pg = new PokerGame();
+
+    int res = pg.judge(a, b);
+
+    assertEquals(1, res);
+  }
 }
