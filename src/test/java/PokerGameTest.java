@@ -3,6 +3,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class PokerGameTest {
+  //high card
   @Test
   public void should_return_minus_when_given_a_is_2C_b_is_10C() {
     String a = "2C";
@@ -36,6 +37,7 @@ public class PokerGameTest {
     assertEquals(-1, res);
   }
 
+  //one pair
   @Test
   public void should_return_minus_when_given_a_1D_3C_5D_QH_KS_b_1D_2C_2D_JH_KS() {
     String a = "1D 3C 5D QH KS";
@@ -58,6 +60,7 @@ public class PokerGameTest {
     assertEquals(1, res);
   }
 
+  //two pairs
   @Test
   public void should_return_minus_when_given_a_1D_3C_5D_3H_KS_b_1D_2C_2D_JH_JS() {
     String a = "1D 3C 5D 3H KS";
@@ -91,6 +94,7 @@ public class PokerGameTest {
     assertEquals(-1, res);
   }
 
+  //three of a kind
   @Test
   public void should_return_positive_when_given_a_1D_3C_5D_3H_3S_b_1D_2C_5D_JH_KS() {
     String a = "1D 3C 5D 3H 3S";
@@ -135,6 +139,7 @@ public class PokerGameTest {
     assertEquals(1, res);
   }
 
+  //Straight
   @Test
   public void should_return_positive_when_given_a_1D_2C_3D_4H_5S_b_1D_2C_5D_JH_KS() {
     String a = "1D 2C 3D 4H 5S";
@@ -190,6 +195,7 @@ public class PokerGameTest {
     assertEquals(-1, res);
   }
 
+  //  Flush
   @Test
   public void should_return_positive_when_given_a_1D_3D_5D_6D_KD_b_3D_4C_5D_6H_7S() {
     String a = "1D 3D 5D 6D KD";
@@ -212,6 +218,7 @@ public class PokerGameTest {
     assertEquals(1, res);
   }
 
+  //  Full House
   @Test
   public void should_return_positive_when_given_a_1D_3D_5D_6D_KD_b_1D_2C_2D_2H_1S() {
     String a = "1D 3D 5D 6D KD";
@@ -232,5 +239,17 @@ public class PokerGameTest {
     int res = pg.judge(a, b);
 
     assertEquals(1, res);
+  }
+
+  //  Four of a kind
+  @Test
+  public void should_return_minus_when_given_a_1D_3C_3D_3H_1S_b_1D_2C_2D_2H_2S() {
+    String a = "1D 3C 3D 3H 1S";
+    String b = "1D 2C 2D 2H 2S";
+    PokerGame pg = new PokerGame();
+
+    int res = pg.judge(a, b);
+
+    assertEquals(-1, res);
   }
 }

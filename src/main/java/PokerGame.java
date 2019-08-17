@@ -14,6 +14,10 @@ public class PokerGame {
     for (Poker poker : pokerList2) {
       map2.put(poker.getSize(), map2.getOrDefault(poker.getSize(), 0) + 1);
     }
+    if (hasFourOfKind(map1, map2)) {
+      Integer x = judgeWithFourOfKind(map1, map2);
+      if (x != null) return x;
+    }
     if (hasFullHouse(map1, map2)) {
       if (map1.size() > map2.size()) {
         return -1;
@@ -29,9 +33,6 @@ public class PokerGame {
       Integer x = judgeWithStraight(pokerList1, pokerList2);
       if (x != null) return x;
     }
-
-
-
     if (hasThreeOfKind(map1, map2)) {
       Integer x = judgeWithThreeOfKind(map1, map2);
       if (x != null) return x;
@@ -43,6 +44,27 @@ public class PokerGame {
     Integer x = judgeHighCard(pokerList1, pokerList2);
     if (x != null) return x;
     return 0;
+  }
+
+  private Integer judgeWithFourOfKind(Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
+    if (isFourOfKind(map1) && !isFourOfKind(map2)) {
+      return 1;
+    } else if (isFourOfKind(map2) && !isFourOfKind(map1)) {
+      return -1;
+    } else if (getKey(map1, 4).get(0) > getKey(map2, 4).get(0)) {
+      return 1;
+    } else if (getKey(map1, 4).get(0) > getKey(map2, 4).get(0)) {
+      return -1;
+    }
+    return null;
+  }
+
+  private boolean hasFourOfKind(Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
+    return isFourOfKind(map1) || isFourOfKind(map2);
+  }
+
+  private boolean isFourOfKind(Map<Integer, Integer> map) {
+    return getKey(map, 4).size() == 1;
   }
 
   private boolean hasFullHouse(Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
@@ -146,10 +168,6 @@ public class PokerGame {
       }
     }
     return null;
-  }
-
-  private boolean isHighCard(List<Poker> pokerList1, List<Poker> pokerList2, Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
-    return map1.size() == pokerList1.size() && map2.size() == pokerList2.size();
   }
 
   private List<Poker> convertCards(String cards) {
