@@ -17,4 +17,15 @@ public class PokerGameTest {
 
     assertEquals(-1, res);
   }
+
+  @Test
+  public void should_return_minus_when_given_a_is_QC_b_is_KC(){
+    List<String> a = new ArrayList<>(Arrays.asList("QC"));
+    List<String> b = new ArrayList<>(Arrays.asList("KC"));
+    PokerGame pg = new PokerGame();
+
+    int res = pg.judge(a, b);
+
+    assertEquals(-1, res);
+  }
 }

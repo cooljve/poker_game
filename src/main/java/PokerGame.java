@@ -17,7 +17,7 @@ public class PokerGame {
   private List<Poker> convertCards(List<String> cardList) {
     List<Poker> pokerList = new ArrayList<>();
     for (String card : cardList) {
-      pokerList.add(new Poker(card.substring(0, 1), card.substring(1, 2)));
+      pokerList.add(new Poker(card.substring(0, card.length()-1), card.substring(card.length()-1)));
     }
     return pokerList;
   }
