@@ -31,7 +31,7 @@ public class PokerGame {
       } else {
         List<Integer> keyList1 = getKey(map1, 2);
         List<Integer> keyList2 = getKey(map2, 2);
-        for (int i = 0; i < keyList1.size(); i++) {
+        for (int i = keyList1.size()-1; i >= 0; i--) {
           if (keyList1.get(i) > keyList2.get(i)) {
             return 1;
           } else if (keyList1.get(i) < keyList2.get(i)) {
