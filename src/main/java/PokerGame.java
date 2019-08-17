@@ -31,10 +31,16 @@ public class PokerGame {
       } else {
         if (getKey(map1, 3).size() > getKey(map2, 3).size()) {
           return 1;
+        } else if (getKey(map1, 3).size() == getKey(map2, 3).size() && getKey(map1, 3).size() != 0) {
+          if (getKey(map1, 3).get(0) > getKey(map2, 3).get(0)) {
+            return 1;
+          } else if (getKey(map1, 3).get(0) > getKey(map2, 3).get(0)) {
+            return -1;
+          }
         }
         List<Integer> keyList1 = getKey(map1, 2);
         List<Integer> keyList2 = getKey(map2, 2);
-        for (int i = keyList1.size()-1; i >= 0; i--) {
+        for (int i = keyList1.size() - 1; i >= 0; i--) {
           if (keyList1.get(i) > keyList2.get(i)) {
             return 1;
           } else if (keyList1.get(i) < keyList2.get(i)) {
