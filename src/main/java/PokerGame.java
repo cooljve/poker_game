@@ -6,6 +6,21 @@ public class PokerGame {
   public int judge(String card1, String card2) {
     List<Poker> pokerList1 = convertCards(card1);
     List<Poker> pokerList2 = convertCards(card2);
+    Map<Integer, Integer> map1 = new LinkedHashMap<>();
+    Map<Integer, Integer> map2 = new LinkedHashMap<>();
+    for (Poker poker : pokerList1) {
+      map1.put(poker.getSize(), map1.getOrDefault(poker.getSize(), 0) + 1);
+    }
+    for (Poker poker : pokerList2) {
+      map2.put(poker.getSize(), map2.getOrDefault(poker.getSize(), 0) + 1);
+    }
+    if (hasFullHouse(map1, map2)) {
+      if (map1.size() > map2.size()) {
+        return -1;
+      } else if (map1.size() < map2.size()) {
+        return 1;
+      }
+    }
     if (hasFlush(pokerList1, pokerList2)) {
       Integer x = judgeWithFlush(pokerList1, pokerList2);
       if (x != null) return x;
@@ -15,14 +30,7 @@ public class PokerGame {
       if (x != null) return x;
     }
 
-    Map<Integer, Integer> map1 = new LinkedHashMap<>();
-    Map<Integer, Integer> map2 = new LinkedHashMap<>();
-    for (Poker poker : pokerList1) {
-      map1.put(poker.getSize(), map1.getOrDefault(poker.getSize(), 0) + 1);
-    }
-    for (Poker poker : pokerList2) {
-      map2.put(poker.getSize(), map2.getOrDefault(poker.getSize(), 0) + 1);
-    }
+
 
     if (hasThreeOfKind(map1, map2)) {
       Integer x = judgeWithThreeOfKind(map1, map2);
@@ -36,6 +44,11 @@ public class PokerGame {
     if (x != null) return x;
     return 0;
   }
+
+  private boolean hasFullHouse(Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
+    return map1.size() == 2 || map2.size() == 2;
+  }
+
 
   private Integer judgeWithPairs(Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
     if (map1.size() > map2.size()) {
@@ -61,9 +74,9 @@ public class PokerGame {
   }
 
   private Integer judgeWithThreeOfKind(Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
-    if (hasThreeOfKind(map1) && !hasThreeOfKind(map2)) {
+    if (isThreeOfKind(map1) && !isThreeOfKind(map2)) {
       return 1;
-    } else if (hasThreeOfKind(map1) && !hasThreeOfKind(map2)) {
+    } else if (isThreeOfKind(map1) && !isThreeOfKind(map2)) {
       return -1;
     } else if (getKey(map1, 3).get(0) > getKey(map2, 3).get(0)) {
       return 1;
@@ -92,10 +105,10 @@ public class PokerGame {
   }
 
   private boolean hasThreeOfKind(Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
-    return hasThreeOfKind(map1) || hasThreeOfKind(map2);
+    return isThreeOfKind(map1) || isThreeOfKind(map2);
   }
 
-  private boolean hasThreeOfKind(Map<Integer, Integer> map) {
+  private boolean isThreeOfKind(Map<Integer, Integer> map) {
     return getKey(map, 3).size() == 1;
   }
 
