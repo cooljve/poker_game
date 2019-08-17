@@ -1,4 +1,5 @@
 import org.junit.Test;
+import poker.PokerGame;
 
 import static org.junit.Assert.assertEquals;
 
@@ -35,6 +36,17 @@ public class PokerGameTest {
     int res = pg.judge(a, b);
 
     assertEquals(-1, res);
+  }
+
+  @Test
+  public void should_return_zero_when_given_a_3D_1C_5D_6H_KS_b_3D_1C_5D_6H_KS() {
+    String a = "1D 3C 5D 6H KS";
+    String b = "1D 3C 5D 6H KS";
+    PokerGame pg = new PokerGame();
+
+    int res = pg.judge(a, b);
+
+    assertEquals(0, res);
   }
 
   //one pair
