@@ -6,6 +6,13 @@ public class PokerGame {
   public int judge(String card1, String card2) {
     List<Poker> pokerList1 = convertCards(card1);
     List<Poker> pokerList2 = convertCards(card2);
+    if (isStraight(pokerList1,pokerList2)) {
+      if (isStraight(pokerList1) && !isStraight(pokerList2)) {
+        return 1;
+      } else if (isStraight(pokerList2) && !isStraight(pokerList1)) {
+        return -1;
+      }
+    }
     Map<Integer, Integer> map1 = new LinkedHashMap<>();
     Map<Integer, Integer> map2 = new LinkedHashMap<>();
     for (Poker poker : pokerList1) {
@@ -14,15 +21,9 @@ public class PokerGame {
     for (Poker poker : pokerList2) {
       map2.put(poker.getSize(), map2.getOrDefault(poker.getSize(), 0) + 1);
     }
-    if (map1.size() == pokerList1.size() && map2.size() == pokerList2.size()) {
-      for (int i = pokerList1.size() - 1; i >= 0; i--) {
-
-        if (pokerList1.get(i).getSize() > pokerList2.get(i).getSize()) {
-          return 1;
-        } else if (pokerList1.get(i).getSize() < pokerList2.get(i).getSize()) {
-          return -1;
-        }
-      }
+    if (isaHighCard(pokerList1, pokerList2, map1, map2)) {
+      Integer x = judgeHighCard(pokerList1, pokerList2);
+      if (x != null) return x;
     } else {
       if (map1.size() > map2.size()) {
         return -1;
@@ -51,6 +52,34 @@ public class PokerGame {
     }
 
     return 0;
+  }
+
+  private boolean isStraight(List<Poker> pokerList1, List<Poker> pokerList2) {
+    return isStraight(pokerList1) || isStraight(pokerList2);
+  }
+
+  private boolean isStraight(List<Poker> pokerList) {
+    for (int i = 0; i < pokerList.size() - 1; i++) {
+      if (pokerList.get(i).getSize() + 1 != pokerList.get(i + 1).getSize()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private Integer judgeHighCard(List<Poker> pokerList1, List<Poker> pokerList2) {
+    for (int i = pokerList1.size() - 1; i >= 0; i--) {
+      if (pokerList1.get(i).getSize() > pokerList2.get(i).getSize()) {
+        return 1;
+      } else if (pokerList1.get(i).getSize() < pokerList2.get(i).getSize()) {
+        return -1;
+      }
+    }
+    return null;
+  }
+
+  private boolean isaHighCard(List<Poker> pokerList1, List<Poker> pokerList2, Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
+    return map1.size() == pokerList1.size() && map2.size() == pokerList2.size();
   }
 
   private List<Poker> convertCards(String cards) {
