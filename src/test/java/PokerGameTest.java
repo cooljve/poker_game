@@ -134,4 +134,48 @@ public class PokerGameTest {
 
     assertEquals(1, res);
   }
+
+  @Test
+  public void should_return_positive_when_given_a_1D_2C_3D_4H_5S_b_1D_2C_2D_JH_KS() {
+    String a = "1D 2C 3D 4H 5S";
+    String b = "1D 2C 2D JH KS";
+    PokerGame pg = new PokerGame();
+
+    int res = pg.judge(a, b);
+
+    assertEquals(1, res);
+  }
+
+  @Test
+  public void should_return_positive_when_given_a_1D_2C_3D_4H_5S_b_1D_2C_2D_JH_JS() {
+    String a = "1D 2C 3D 4H 5S";
+    String b = "1D 2C 2D JH JS";
+    PokerGame pg = new PokerGame();
+
+    int res = pg.judge(a, b);
+
+    assertEquals(1, res);
+  }
+
+  @Test
+  public void should_return_positive_when_given_a_1D_2C_3D_4H_5S_b_1D_2C_2D_2H_JS() {
+    String a = "1D 2C 3D 4H 5S";
+    String b = "1D 2C 2D 2H JS";
+    PokerGame pg = new PokerGame();
+
+    int res = pg.judge(a, b);
+
+    assertEquals(1, res);
+  }
+
+  @Test
+  public void should_return_minus_when_given_a_1D_2C_3D_4H_5S_b_3D_4C_5D_6H_7S() {
+    String a = "1D 2C 3D 4H 5S";
+    String b = "3D 4C 5D 6H 7S";
+    PokerGame pg = new PokerGame();
+
+    int res = pg.judge(a, b);
+
+    assertEquals(-1, res);
+  }
 }
