@@ -81,6 +81,17 @@ public class PokerGameTest {
   }
 
   @Test
+  public void should_return_minus_when_given_a_KD_3C_10D_3H_10S_b_1D_2C_2D_JH_JS() {
+    String a = "KD 3C 10D 3H 10S";
+    String b = "1D 2C 2D JH JS";
+    PokerGame pg = new PokerGame();
+
+    int res = pg.judge(a, b);
+
+    assertEquals(-1, res);
+  }
+
+  @Test
   public void should_return_positive_when_given_a_1D_3C_5D_3H_3S_b_1D_2C_5D_JH_KS() {
     String a = "1D 3C 5D 3H 3S";
     String b = "1D 2C 5D JH KS";

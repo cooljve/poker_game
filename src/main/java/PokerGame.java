@@ -7,19 +7,14 @@ public class PokerGame {
     List<Poker> pokerList1 = convertCards(card1);
     List<Poker> pokerList2 = convertCards(card2);
     if (hasFlush(pokerList1, pokerList2)) {
-      if (isFlush(pokerList1) && !isFlush(pokerList2)) {
-        return 1;
-      } else if (isFlush(pokerList2) && !isFlush(pokerList1)) {
-        return -1;
-      }
+      Integer x = judgeWithFlush(pokerList1, pokerList2);
+      if (x != null) return x;
     }
-    if (hasStraight(pokerList1,pokerList2)) {
-      if (isStraight(pokerList1) && !isStraight(pokerList2)) {
-        return 1;
-      } else if (isStraight(pokerList2) && !isStraight(pokerList1)) {
-        return -1;
-      }
+    if (hasStraight(pokerList1, pokerList2)) {
+      Integer x = judgeWithStraight(pokerList1, pokerList2);
+      if (x != null) return x;
     }
+
     Map<Integer, Integer> map1 = new LinkedHashMap<>();
     Map<Integer, Integer> map2 = new LinkedHashMap<>();
     for (Poker poker : pokerList1) {
@@ -28,37 +23,80 @@ public class PokerGame {
     for (Poker poker : pokerList2) {
       map2.put(poker.getSize(), map2.getOrDefault(poker.getSize(), 0) + 1);
     }
-    if (isHighCard(pokerList1, pokerList2, map1, map2)) {
-      Integer x = judgeHighCard(pokerList1, pokerList2);
+
+    if (hasThreeOfKind(map1, map2)) {
+      Integer x = judgeWithThreeOfKind(map1, map2);
       if (x != null) return x;
+    }
+    if (hasPairs(map1, map2)) {
+      Integer x = judgeWithPairs(map1, map2);
+      if (x != null) return x;
+    }
+    Integer x = judgeHighCard(pokerList1, pokerList2);
+    if (x != null) return x;
+    return 0;
+  }
+
+  private Integer judgeWithPairs(Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
+    if (map1.size() > map2.size()) {
+      return -1;
+    } else if (map1.size() < map2.size()) {
+      return 1;
     } else {
-      if (map1.size() > map2.size()) {
-        return -1;
-      } else if (map1.size() < map2.size()) {
-        return 1;
-      } else {
-        if (getKey(map1, 3).size() > getKey(map2, 3).size()) {
+      List<Integer> keyList1 = getKey(map1, 2);
+      List<Integer> keyList2 = getKey(map2, 2);
+      for (int i = keyList1.size() - 1; i >= 0; i--) {
+        if (keyList1.get(i) > keyList2.get(i)) {
           return 1;
-        } else if (getKey(map1, 3).size() == getKey(map2, 3).size() && getKey(map1, 3).size() != 0) {
-          if (getKey(map1, 3).get(0) > getKey(map2, 3).get(0)) {
-            return 1;
-          } else if (getKey(map1, 3).get(0) > getKey(map2, 3).get(0)) {
-            return -1;
-          }
-        }
-        List<Integer> keyList1 = getKey(map1, 2);
-        List<Integer> keyList2 = getKey(map2, 2);
-        for (int i = keyList1.size() - 1; i >= 0; i--) {
-          if (keyList1.get(i) > keyList2.get(i)) {
-            return 1;
-          } else if (keyList1.get(i) < keyList2.get(i)) {
-            return -1;
-          }
+        } else if (keyList1.get(i) < keyList2.get(i)) {
+          return -1;
         }
       }
     }
+    return null;
+  }
 
-    return 0;
+  private boolean hasPairs(Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
+    return map1.size() == 3 || map2.size() == 3 || map1.size() == 4 || map2.size() == 4;
+  }
+
+  private Integer judgeWithThreeOfKind(Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
+    if (hasThreeOfKind(map1) && !hasThreeOfKind(map2)) {
+      return 1;
+    } else if (hasThreeOfKind(map1) && !hasThreeOfKind(map2)) {
+      return -1;
+    } else if (getKey(map1, 3).get(0) > getKey(map2, 3).get(0)) {
+      return 1;
+    } else if (getKey(map1, 3).get(0) > getKey(map2, 3).get(0)) {
+      return -1;
+    }
+    return null;
+  }
+
+  private Integer judgeWithStraight(List<Poker> pokerList1, List<Poker> pokerList2) {
+    if (isStraight(pokerList1) && !isStraight(pokerList2)) {
+      return 1;
+    } else if (isStraight(pokerList2) && !isStraight(pokerList1)) {
+      return -1;
+    }
+    return null;
+  }
+
+  private Integer judgeWithFlush(List<Poker> pokerList1, List<Poker> pokerList2) {
+    if (isFlush(pokerList1) && !isFlush(pokerList2)) {
+      return 1;
+    } else if (isFlush(pokerList2) && !isFlush(pokerList1)) {
+      return -1;
+    }
+    return null;
+  }
+
+  private boolean hasThreeOfKind(Map<Integer, Integer> map1, Map<Integer, Integer> map2) {
+    return hasThreeOfKind(map1) || hasThreeOfKind(map2);
+  }
+
+  private boolean hasThreeOfKind(Map<Integer, Integer> map) {
+    return getKey(map, 3).size() == 1;
   }
 
   private boolean hasFlush(List<Poker> pokerList1, List<Poker> pokerList2) {
